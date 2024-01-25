@@ -1,6 +1,7 @@
 import { useState } from 'react';  
 import { v4 as uuidv4 } from 'uuid';
 import './App.css'
+import SingleCard from './components/SingleCard';
 
 const cardImages = [
   { "src": "./assets/helmet-1.png" },
@@ -16,7 +17,7 @@ function App() {
   const [turns, setTurns] = useState(0); 
 
   const shuffleCards = () => {
-    // Duplicate the set of cards, randomly sort them, and tag on an id
+    // Duplicates the set of cards, randomly sorts them, and tags on an id
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ( { ...card, id: uuidv4() } ));
@@ -30,10 +31,7 @@ function App() {
       <button onClick={shuffleCards}>New Game</button>
       <div className="card-grid">
         {cards.map((card) => (
-          <div className="card" key={card.id}>
-            <img className="front" src={card.src} alt="card front" />
-            <img className="back" src="./assets/cover.png" alt="card back" />
-          </div>
+          <SingleCard key={card.id} src={card.src} />
         ))}
       </div>
     </div>

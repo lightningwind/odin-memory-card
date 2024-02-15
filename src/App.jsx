@@ -17,6 +17,7 @@ function App() {
   const [turns, setTurns] = useState(0); 
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
   const shuffleCards = () => {
     // Duplicates the set of cards, randomly sorts them, and tags on an id
@@ -25,6 +26,8 @@ function App() {
       .map((card) => ( { ...card, id: uuidv4() } ));
     setCards(shuffledCards);  
     setTurns(0);
+    setChoiceOne(null);
+    setChoiceTwo(null);
   }
 
   const handleChoice = (card) => {
@@ -33,22 +36,31 @@ function App() {
 
   useEffect(() => {
     if (choiceOne && choiceTwo) {
+      setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
         setCards( (prevCards) => {
           return prevCards.map( (card) => {
+            // Tag on a matched property if this is the selected card
             return (card.src === choiceOne.src) ? {...card, matched: true} 
               : card;
           } )
         })
       }
+      // Set a delay before flipping the cards over
       setTimeout(() => resetTurn(), 1000);
     }
   }, [choiceOne, choiceTwo])
+
+  // Starts a new game on load with a new hook
+  useEffect(() => {
+    shuffleCards();
+  }, [])
 
   const resetTurn = () => {
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurns((prevTurns) => prevTurns + 1);
+    setDisabled(false);
   }
 
   return (
@@ -62,9 +74,11 @@ function App() {
             src={card.src} 
             handleChoice={() => handleChoice(card)} 
             flipped={ card === choiceOne || card === choiceTwo || card.matched }
+            disabled={disabled}
           />
         ))}
       </div>
+      <p>Turns: {turns}</p>
     </div>
   )
 }

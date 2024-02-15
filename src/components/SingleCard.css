@@ -8,3 +8,15 @@
   border: 2px solid #fff;
   border-radius: 6px;
 }
+
+.card .front {
+  /* Have the picture sit on top */
+  position: absolute; 
+  /* Have the picture initially hidden */
+  transform: rotateY(90deg);
+}
+
+.flip .front {
+  /* Reveal the picture */
+  transform: rotateY(0deg);
+}
